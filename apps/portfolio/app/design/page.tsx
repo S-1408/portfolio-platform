@@ -129,10 +129,7 @@ function ThemePreview({
 
 export default function DesignPage() {
   return (
-    <main id="design-preview-main" className="py-section">
-      <SkipLink href="#design-preview-main">
-        {designSystemContent.skipLinkLabel}
-      </SkipLink>
+    <div className="py-section">
       <Container>
         <header className="mb-10 space-y-3">
           <h1 className="text-ink text-4xl font-bold tracking-tight">
@@ -150,6 +147,6 @@ export default function DesignPage() {
           <ThemePreview theme="dark" label={designSystemContent.themes.dark} />
         </div>
       </Container>
-    </main>
+    </div>
   );
 }

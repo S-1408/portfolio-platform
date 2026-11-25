@@ -2,6 +2,9 @@ export type {
   Experience,
   Highlight,
   HighlightKind,
+  FooterContent,
+  HeaderLabels,
+  NavigationItem,
   Profile,
   Project,
   ProjectCategory,
@@ -12,6 +15,8 @@ export type {
 
 export { profile } from "./profile.js";
 export { socials } from "./socials.js";
+export { navigationItems, headerLabels } from "./navigation.js";
+export { footerContent } from "./footer.js";
 export { skillGroups } from "./skills.js";
 export { experience } from "./experience.js";
 export { highlights } from "./highlights.js";
