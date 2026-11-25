@@ -87,8 +87,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               alt={`${project.title} ${portfolioCopy.projectPreviewAlt}`}
               className="object-cover"
               fill
-              priority
-              sizes="(min-width: 1280px) 80vw, 100vw"
+              preload
+              sizes="(min-width: 1280px) 1216px, 100vw"
               src={project.image}
             />
           </div>

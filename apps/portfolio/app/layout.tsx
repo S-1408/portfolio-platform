@@ -10,6 +10,8 @@ import {
 } from "@repo/content";
 import { createRootMetadata } from "@repo/lib";
 import { Footer, Header, SkipLink } from "@repo/ui";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Lato } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { siteConfig } from "./_seo/site";
@@ -38,6 +40,9 @@ export const viewport: Viewport = {
 };
 
 const showBlog = process.env.NEXT_PUBLIC_ENABLE_BLOG === "true";
+// Their scripts are served from /_vercel/* and only exist on Vercel; skipping
+// them elsewhere avoids 404s (and console errors) locally and in CI.
+const isVercel = process.env.VERCEL === "1";
 const visibleNavigationItems = navigationItems.filter(
   (item) => item.id !== "blog" || showBlog,
 );
@@ -63,9 +68,17 @@ export default function RootLayout({
             logoAlt={profile.name}
             labels={headerLabels}
           />
-          <main id="main">{children}</main>
+          <main id="main" tabIndex={-1} className="focus:outline-none">
+            {children}
+          </main>
           <Footer content={footerContent} socials={socials} />
         </ThemeProvider>
+        {isVercel ? (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        ) : null}
       </body>
     </html>
   );

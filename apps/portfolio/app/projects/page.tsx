@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { portfolioCopy } from "@repo/content";
 import { createPageMetadata } from "@repo/lib";
 import { Container, Section } from "@repo/ui";
@@ -18,17 +17,12 @@ export default function ProjectsPage() {
       <Section
         id="projects-page"
         heading={portfolioCopy.projectsPageTitle}
+        headingLevel={1}
         description={portfolioCopy.projectsPageDescription}
       >
-        <Suspense
-          fallback={
-            <p aria-live="polite" className="text-muted">
-              {portfolioCopy.projectsLoadingLabel}
-            </p>
-          }
-        >
-          <ProjectBrowser />
-        </Suspense>
+        {/* Static HTML shows the unfiltered list; the client applies the URL
+            filters after hydration (see use-url-search.ts). */}
+        <ProjectBrowser />
       </Section>
     </Container>
   );

@@ -24,5 +24,7 @@ export { ThemeToggle } from "./theme-toggle.js";
 export type { ThemeToggleProps } from "./theme-toggle.js";
 export { Header } from "./header.js";
 export type { HeaderNavItem, HeaderProps } from "./header.js";
+export { ProjectCard } from "./project-card.js";
+export type { ProjectCardProject, ProjectCardProps } from "./project-card.js";
 export { Footer } from "./footer.js";
 export type { FooterProps, FooterSocialLink } from "./footer.js";

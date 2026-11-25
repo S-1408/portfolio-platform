@@ -14,7 +14,8 @@
   --ds-color-surface-raised: #ffffff;
   --ds-color-ink: #172b2a;
   --ds-color-muted: #526462;
-  --ds-color-border: #7f9490;
+  /* ≥3:1 against background, surface and surface-raised (WCAG 1.4.11). */
+  --ds-color-border: #778c88;
   --ds-color-focus: #006e67;
 
   --ds-radius-sm: 0.375rem;
@@ -45,7 +46,7 @@
   --ds-color-surface-raised: #1d3533;
   --ds-color-ink: #edf5f3;
   --ds-color-muted: #b4c5c2;
-  --ds-color-border: #647d79;
+  --ds-color-border: #6d8783;
   --ds-color-focus: #67f0e8;
 }
 

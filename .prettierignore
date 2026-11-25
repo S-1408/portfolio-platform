@@ -4,3 +4,7 @@ dist
 .turbo
 coverage
 pnpm-lock.yaml
+.next-analyze
+playwright-report
+test-results
+.lighthouseci

@@ -18,7 +18,6 @@ export const portfolioCopy = {
   projectResultsPlural: "projects found",
   noProjectsFoundHeading: "No projects found",
   noProjectsFoundDescription: "Try another category or search term.",
-  projectsLoadingLabel: "Loading projects",
   backToProjectsLabel: "Back to projects",
   projectTechnologiesHeading: "Technologies",
   projectLinksHeading: "Project links",

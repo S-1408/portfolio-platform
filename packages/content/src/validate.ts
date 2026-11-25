@@ -153,7 +153,6 @@ const portfolioCopySchema = z
     projectResultsPlural: z.string().min(1),
     noProjectsFoundHeading: z.string().min(1),
     noProjectsFoundDescription: z.string().min(1),
-    projectsLoadingLabel: z.string().min(1),
     backToProjectsLabel: z.string().min(1),
     projectTechnologiesHeading: z.string().min(1),
     projectLinksHeading: z.string().min(1),
@@ -367,5 +366,3 @@ export function parsePortfolioContent() {
     errorPageContent,
   });
 }
-
-parsePortfolioContent();

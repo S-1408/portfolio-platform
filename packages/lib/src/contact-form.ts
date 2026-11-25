@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as z from "zod/mini";
 
 export const contactFieldNames = ["name", "email", "message"] as const;
 
@@ -28,23 +28,33 @@ export type ContactValidationResult =
   | { success: true; data: ContactFormValues }
   | { success: false; fieldErrors: ContactFieldErrors };
 
+// zod/mini keeps the browser bundle small: this schema runs client-side in
+// the contact form as well as in the server action.
 export function createContactSchema(messages: ContactValidationMessages) {
   return z.object({
     name: z
       .string()
-      .trim()
-      .min(1, messages.nameRequired)
-      .max(contactFormLimits.nameMax, messages.nameTooLong),
-    email: z
-      .string()
-      .trim()
-      .max(contactFormLimits.emailMax, messages.emailTooLong)
-      .pipe(z.email(messages.emailInvalid)),
+      .check(
+        z.trim(),
+        z.minLength(1, messages.nameRequired),
+        z.maxLength(contactFormLimits.nameMax, messages.nameTooLong),
+      ),
+    email: z.pipe(
+      z
+        .string()
+        .check(
+          z.trim(),
+          z.maxLength(contactFormLimits.emailMax, messages.emailTooLong),
+        ),
+      z.email(messages.emailInvalid),
+    ),
     message: z
       .string()
-      .trim()
-      .min(contactFormLimits.messageMin, messages.messageTooShort)
-      .max(contactFormLimits.messageMax, messages.messageTooLong),
+      .check(
+        z.trim(),
+        z.minLength(contactFormLimits.messageMin, messages.messageTooShort),
+        z.maxLength(contactFormLimits.messageMax, messages.messageTooLong),
+      ),
   });
 }
 

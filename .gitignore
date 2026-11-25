@@ -3,6 +3,7 @@ node_modules/
 
 # build output
 .next/
+.next-analyze/
 dist/
 out/
 build/
@@ -25,3 +26,4 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+.lighthouseci/

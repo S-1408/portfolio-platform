@@ -11,6 +11,11 @@ export const nextConfig = {
   plugins: {
     "@next/next": nextPlugin,
   },
+  settings: {
+    // Lets Next's rules find the apps whether ESLint runs inside an app
+    // (`pnpm lint`) or from the repo root (lint-staged in the pre-commit hook).
+    next: { rootDir: ["apps/*/", "./"] },
+  },
   rules: {
     ...nextPlugin.configs.recommended.rules,
     ...nextPlugin.configs["core-web-vitals"].rules,

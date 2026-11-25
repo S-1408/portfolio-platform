@@ -44,3 +44,12 @@ export type {
   SocialImage,
   SiteUrlEnv,
 } from "./seo.js";
+export {
+  ALL_CATEGORIES,
+  buildProjectSearchHref,
+  parseProjectSearchParams,
+} from "./project-search-params.js";
+export type {
+  ProjectSearchState,
+  ReadableSearchParams,
+} from "./project-search-params.js";

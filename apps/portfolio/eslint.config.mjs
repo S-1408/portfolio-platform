@@ -4,5 +4,5 @@ import { globalIgnores } from "eslint/config";
 export default [
   ...baseConfig,
   nextConfig,
-  globalIgnores([".next/**", "next-env.d.ts"]),
+  globalIgnores([".next/**", ".next-analyze/**", "next-env.d.ts"]),
 ];
