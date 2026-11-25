@@ -1,0 +1,27 @@
+# dependencies
+node_modules/
+
+# build output
+.next/
+dist/
+out/
+build/
+coverage/
+.turbo/
+*.tsbuildinfo
+
+# local environment
+.env
+.env.*
+!.env.example
+
+# logs and caches
+*.log
+.eslintcache
+.DS_Store
+Thumbs.db
+
+# editor and OS files
+.idea/
+.vscode/*
+!.vscode/extensions.json
