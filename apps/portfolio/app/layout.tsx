@@ -1,15 +1,18 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import {
   footerContent,
   headerLabels,
   navigationItems,
   portfolioCopy,
   profile,
+  seoContent,
   socials,
 } from "@repo/content";
+import { createRootMetadata } from "@repo/lib";
 import { Footer, Header, SkipLink } from "@repo/ui";
 import { Lato } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { siteConfig } from "./_seo/site";
 import "./globals.css";
 
 const lato = Lato({
@@ -19,9 +22,19 @@ const lato = Lato({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: `${profile.name} | ${profile.role}`,
-  description: profile.intro,
+export const metadata: Metadata = createRootMetadata(siteConfig);
+
+export const viewport: Viewport = {
+  themeColor: [
+    {
+      media: "(prefers-color-scheme: light)",
+      color: seoContent.manifest.backgroundColor,
+    },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: seoContent.manifest.darkThemeColor,
+    },
+  ],
 };
 
 const showBlog = process.env.NEXT_PUBLIC_ENABLE_BLOG === "true";

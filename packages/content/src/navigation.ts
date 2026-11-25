@@ -1,4 +1,3 @@
-import { profile } from "./profile.js";
 import type { HeaderLabels, NavigationItem } from "./types.js";
 
 export const navigationItems: readonly NavigationItem[] = [
@@ -12,7 +11,7 @@ export const navigationItems: readonly NavigationItem[] = [
   },
   { id: "contact", label: "Contact", href: "/#contact", sectionId: "contact" },
   { id: "blog", label: "Blog", href: "/blog", crossZone: true },
-  { id: "resume", label: "Resume", href: profile.resumePath, download: true },
+  { id: "resume", label: "Resume", href: "/resume" },
 ];
 
 export const headerLabels: HeaderLabels = {

@@ -1,14 +1,19 @@
 export type {
+  ContactContent,
+  ErrorPageContent,
   Experience,
   Highlight,
   HighlightKind,
   FooterContent,
   HeaderLabels,
   NavigationItem,
+  NotFoundContent,
   Profile,
   Project,
   ProjectCategory,
   ProjectFilter,
+  ResumeContent,
+  SeoContent,
   SkillGroup,
   SocialLink,
 } from "./types.js";
@@ -24,4 +29,7 @@ export { projects } from "./projects.js";
 export { projectFilters } from "./filters.js";
 export { designSystemContent } from "./design-system.js";
 export { portfolioCopy } from "./copy.js";
+export { contactContent } from "./contact.js";
+export { resumeContent } from "./resume.js";
+export { errorPageContent, notFoundContent, seoContent } from "./seo.js";
 export { parsePortfolioContent, portfolioContentSchema } from "./validate.js";
