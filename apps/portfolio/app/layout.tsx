@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteContent } from "@repo/content";
+import { profile } from "@repo/content";
 import { Lato } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
@@ -12,8 +12,8 @@ const lato = Lato({
 });
 
 export const metadata: Metadata = {
-  title: siteContent.title,
-  description: siteContent.description,
+  title: `${profile.name} | ${profile.role}`,
+  description: profile.intro,
 };
 
 export default function RootLayout({
