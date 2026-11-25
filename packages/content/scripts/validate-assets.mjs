@@ -1,7 +1,12 @@
 import { existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { portfolioCopy, profile, projects } from "../dist/index.js";
+import {
+  portfolioCopy,
+  profile,
+  projects,
+  resumeContent,
+} from "../dist/index.js";
 
 const repositoryRoot = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -11,6 +16,7 @@ const publicRoot = resolve(repositoryRoot, "apps/portfolio/public");
 const assetPaths = [
   profile.photo,
   profile.resumePath,
+  resumeContent.pdfPath,
   portfolioCopy.logoPath,
   ...projects.map((project) => project.image),
 ];

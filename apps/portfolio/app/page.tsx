@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import {
   experience,
   highlights,
@@ -6,11 +8,41 @@ import {
   profile,
   projectFilters,
   projects,
+  seoContent,
   skillGroups,
   socials,
 } from "@repo/content";
+import {
+  absoluteUrl,
+  createPageMetadata,
+  createPersonJsonLd,
+  serializeJsonLd,
+} from "@repo/lib";
 import type { ProjectCategory } from "@repo/content";
 import { Badge, Button, Card, Container, Section, Tag } from "@repo/ui";
+import { ContactSection } from "./_contact/contact-section";
+import { siteConfig } from "./_seo/site";
+
+export const metadata: Metadata = createPageMetadata(siteConfig, {
+  description: seoContent.description,
+  path: "/",
+  openGraphType: "profile",
+});
+
+const personJsonLd = createPersonJsonLd({
+  name: profile.name,
+  jobTitle: profile.role,
+  url: siteConfig.url.toString(),
+  description: seoContent.description,
+  image: absoluteUrl(profile.photo, siteConfig.url),
+  email: profile.email,
+  sameAs: socials.map((social) => social.url),
+  address: {
+    addressLocality: seoContent.addressLocality,
+    addressCountry: seoContent.addressCountry,
+  },
+  knowsAbout: seoContent.knowsAbout,
+});
 
 function getProjectFilterLabel(category: ProjectCategory) {
   const filter = projectFilters.find((item) => item.value === category);
@@ -23,8 +55,14 @@ function getProjectFilterLabel(category: ProjectCategory) {
 }
 
 export default function HomePage() {
+  const featuredProjects = projects.filter((project) => project.featured);
+
   return (
     <div className="home-page-background bg-background text-ink py-section min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(personJsonLd) }}
+      />
       <div aria-hidden="true" className="home-page-motion">
         <span className="home-page-motion__shape home-page-motion__shape--teal" />
         <span className="home-page-motion__shape home-page-motion__shape--orange" />
@@ -67,9 +105,7 @@ export default function HomePage() {
               </a>
             </div>
             <div className="flex flex-wrap items-center gap-4">
-              <Button href={profile.resumePath} download>
-                {portfolioCopy.resumeLabel}
-              </Button>
+              <Button href="/resume">{portfolioCopy.resumeLabel}</Button>
               <nav aria-label={portfolioCopy.socialProfilesLabel}>
                 <ul className="flex flex-wrap gap-3">
                   {socials.map((social) => (
@@ -190,19 +226,9 @@ export default function HomePage() {
           </ul>
         </Section>
 
-        <Section id="projects" heading={portfolioCopy.projectsHeading}>
-          <ul
-            aria-label={portfolioCopy.projectFiltersLabel}
-            className="mb-6 flex flex-wrap gap-2"
-          >
-            {projectFilters.map((filter) => (
-              <li key={filter.value}>
-                <Tag>{filter.label}</Tag>
-              </li>
-            ))}
-          </ul>
+        <Section id="projects" heading={portfolioCopy.featuredProjectsHeading}>
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {projects.map((project) => (
+            {featuredProjects.map((project) => (
               <Card
                 key={project.slug}
                 className="flex h-full flex-col overflow-hidden p-0"
@@ -226,7 +252,12 @@ export default function HomePage() {
                     ) : null}
                   </div>
                   <h3 className="mt-4 text-xl font-semibold">
-                    {project.title}
+                    <Link
+                      className="hover:text-primary-hover focus-visible:outline-focus focus-visible:outline-2 focus-visible:outline-offset-4"
+                      href={`/projects/${project.slug}`}
+                    >
+                      {project.title}
+                    </Link>
                   </h3>
                   <p className="text-muted mt-2">{project.description}</p>
                   <ul className="mt-4 flex flex-wrap gap-2">
@@ -262,11 +293,14 @@ export default function HomePage() {
               </Card>
             ))}
           </div>
+          <div className="flex justify-center">
+            <Button href="/projects" variant="outline">
+              {portfolioCopy.viewAllProjectsLabel}
+            </Button>
+          </div>
         </Section>
 
-        <Section id="contact" heading={portfolioCopy.contactHeading}>
-          <Button href={`mailto:${profile.email}`}>{profile.email}</Button>
-        </Section>
+        <ContactSection />
       </Container>
     </div>
   );

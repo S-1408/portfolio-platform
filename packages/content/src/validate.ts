@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { contactContent } from "./contact.js";
 import { portfolioCopy } from "./copy.js";
 import { designSystemContent } from "./design-system.js";
 import { experience } from "./experience.js";
@@ -8,6 +9,8 @@ import { highlights } from "./highlights.js";
 import { profile } from "./profile.js";
 import { projects } from "./projects.js";
 import { projectFilters } from "./filters.js";
+import { resumeContent } from "./resume.js";
+import { errorPageContent, notFoundContent, seoContent } from "./seo.js";
 import { skillGroups } from "./skills.js";
 import { socials } from "./socials.js";
 
@@ -139,6 +142,21 @@ const portfolioCopySchema = z
     experienceHeading: z.string().min(1),
     highlightsHeading: z.string().min(1),
     projectsHeading: z.string().min(1),
+    featuredProjectsHeading: z.string().min(1),
+    viewAllProjectsLabel: z.string().min(1),
+    projectsPageTitle: z.string().min(1),
+    projectsPageDescription: z.string().min(1),
+    projectSearchLabel: z.string().min(1),
+    projectSearchPlaceholder: z.string().min(1),
+    searchProjectsLabel: z.string().min(1),
+    projectResultsSingular: z.string().min(1),
+    projectResultsPlural: z.string().min(1),
+    noProjectsFoundHeading: z.string().min(1),
+    noProjectsFoundDescription: z.string().min(1),
+    projectsLoadingLabel: z.string().min(1),
+    backToProjectsLabel: z.string().min(1),
+    projectTechnologiesHeading: z.string().min(1),
+    projectLinksHeading: z.string().min(1),
     liveDemoLabel: z.string().min(1),
     codeLabel: z.string().min(1),
     socialProfilesLabel: z.string().min(1),
@@ -197,6 +215,115 @@ const designSystemContentSchema = z
   })
   .strict();
 
+const nonEmpty = z.string().min(1);
+
+const contactContentSchema = z
+  .object({
+    pitchHeading: nonEmpty,
+    pitch: nonEmpty,
+    detailsHeading: nonEmpty,
+    emailLabel: nonEmpty,
+    email: z.string().email(),
+    locationLabel: nonEmpty,
+    location: nonEmpty,
+    socialProfilesLabel: nonEmpty,
+    form: z
+      .object({
+        heading: nonEmpty,
+        nameLabel: nonEmpty,
+        emailLabel: nonEmpty,
+        messageLabel: nonEmpty,
+        requiredLabel: nonEmpty,
+        honeypotLabel: nonEmpty,
+        submitLabel: nonEmpty,
+        submittingLabel: nonEmpty,
+        successMessage: nonEmpty,
+        invalidMessage: nonEmpty,
+        rateLimitedMessage: nonEmpty,
+        unavailableMessage: nonEmpty,
+        sendFailedMessage: nonEmpty,
+      })
+      .strict(),
+    validation: z
+      .object({
+        nameRequired: nonEmpty,
+        nameTooLong: nonEmpty,
+        emailInvalid: nonEmpty,
+        emailTooLong: nonEmpty,
+        messageTooShort: nonEmpty,
+        messageTooLong: nonEmpty,
+      })
+      .strict(),
+    emailSubjectPrefix: nonEmpty,
+  })
+  .strict();
+
+const resumeContentSchema = z
+  .object({
+    title: nonEmpty,
+    metaDescription: nonEmpty,
+    summaryHeading: nonEmpty,
+    summary: z.array(nonEmpty).min(1),
+    pdfPath: z.string().startsWith("/").endsWith(".pdf"),
+    downloadFileName: z.string().endsWith(".pdf"),
+    downloadLabel: nonEmpty,
+    openInNewTabLabel: nonEmpty,
+    viewerHeading: nonEmpty,
+    viewerTitle: nonEmpty,
+    fallbackMessage: nonEmpty,
+    fallbackLinkLabel: nonEmpty,
+  })
+  .strict();
+
+const hexColor = z.string().regex(/^#[0-9a-f]{6}$/i);
+
+const seoContentSchema = z
+  .object({
+    siteName: nonEmpty,
+    titleTemplate: z.string().includes("%s"),
+    defaultTitle: nonEmpty,
+    description: z.string().min(50).max(160),
+    keywords: z.array(nonEmpty).min(1),
+    locale: z.string().regex(/^[a-z]{2}_[A-Z]{2}$/),
+    addressLocality: nonEmpty,
+    addressCountry: z.string().length(2),
+    knowsAbout: z.array(nonEmpty).min(1),
+    homeOgAlt: nonEmpty,
+    projectOgAltSuffix: nonEmpty,
+    manifest: z
+      .object({
+        name: nonEmpty,
+        shortName: z.string().min(1).max(12),
+        backgroundColor: hexColor,
+        themeColor: hexColor,
+        darkThemeColor: hexColor,
+      })
+      .strict(),
+  })
+  .strict();
+
+const notFoundContentSchema = z
+  .object({
+    title: nonEmpty,
+    code: nonEmpty,
+    heading: nonEmpty,
+    description: nonEmpty,
+    homeLabel: nonEmpty,
+    projectsLabel: nonEmpty,
+  })
+  .strict();
+
+const errorPageContentSchema = z
+  .object({
+    title: nonEmpty,
+    heading: nonEmpty,
+    description: nonEmpty,
+    retryLabel: nonEmpty,
+    homeLabel: nonEmpty,
+    referenceLabel: nonEmpty,
+  })
+  .strict();
+
 export const portfolioContentSchema = z
   .object({
     profile: profileSchema,
@@ -211,6 +338,11 @@ export const portfolioContentSchema = z
     footerContent: footerContentSchema,
     portfolioCopy: portfolioCopySchema,
     designSystemContent: designSystemContentSchema,
+    contactContent: contactContentSchema,
+    resumeContent: resumeContentSchema,
+    seoContent: seoContentSchema,
+    notFoundContent: notFoundContentSchema,
+    errorPageContent: errorPageContentSchema,
   })
   .strict();
 
@@ -228,6 +360,11 @@ export function parsePortfolioContent() {
     footerContent,
     portfolioCopy,
     designSystemContent,
+    contactContent,
+    resumeContent,
+    seoContent,
+    notFoundContent,
+    errorPageContent,
   });
 }
 

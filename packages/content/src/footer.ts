@@ -11,5 +11,5 @@ export const footerContent: FooterContent = {
   email: profile.email,
   copyrightName: profile.name,
   copyrightSuffix: "All rights reserved.",
-  builtWith: "Built with Next.js",
+  builtWith: "Built with 💗",
 };
