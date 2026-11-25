@@ -16,7 +16,7 @@
     "@repo/config": "workspace:*",
     "@repo/content": "workspace:*",
     "@repo/portfolio": "workspace:*",
-    "@types/node": "^24.19.2",
+    "@types/node": "^26.6.6",
     "eslint": "^10.15.0"
   }
 }
