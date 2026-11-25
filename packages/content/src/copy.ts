@@ -1,0 +1,17 @@
+export const portfolioCopy = {
+  logoPath: "/images/sv.png",
+  resumeLabel: "View Resume",
+  yearsOfExperienceLabel: "Years of experience",
+  skillsHeading: "Core Skills",
+  experienceHeading: "Experience",
+  highlightsHeading: "Highlights",
+  projectsHeading: "PROJECTS",
+  liveDemoLabel: "Live Demo",
+  codeLabel: "View Code",
+  socialProfilesLabel: "Social profiles",
+  skipToContentLabel: "Skip to content",
+  projectFiltersLabel: "Filter projects",
+  projectPreviewAlt: "project preview",
+  featuredLabel: "Featured",
+  contactHeading: "Contact",
+} as const;
