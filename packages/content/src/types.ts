@@ -62,3 +62,36 @@ export type ProjectFilter = {
   label: string;
   value: "all" | ProjectCategory;
 };
+
+export type NavigationItem = {
+  id: string;
+  label: string;
+  href: string;
+  sectionId?: string;
+  crossZone?: boolean;
+  download?: boolean;
+};
+
+export type HeaderLabels = {
+  navigationLabel: string;
+  mobileMenuLabel: string;
+  openMenuLabel: string;
+  closeMenuLabel: string;
+  themeToggleLabels: {
+    light: string;
+    dark: string;
+  };
+};
+
+export type FooterContent = {
+  hireHeading: string;
+  hireBlurb: string;
+  socialProfilesLabel: string;
+  locationLabel: string;
+  location: string;
+  emailLabel: string;
+  email: string;
+  copyrightName: string;
+  copyrightSuffix: string;
+  builtWith: string;
+};

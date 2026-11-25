@@ -2,6 +2,8 @@ import { z } from "zod";
 import { portfolioCopy } from "./copy.js";
 import { designSystemContent } from "./design-system.js";
 import { experience } from "./experience.js";
+import { footerContent } from "./footer.js";
+import { headerLabels, navigationItems } from "./navigation.js";
 import { highlights } from "./highlights.js";
 import { profile } from "./profile.js";
 import { projects } from "./projects.js";
@@ -87,6 +89,47 @@ const projectFilterSchema = z
   })
   .strict();
 
+const navigationItemSchema = z
+  .object({
+    id: z.string().min(1),
+    label: z.string().min(1),
+    href: z.string().startsWith("/"),
+    sectionId: z.string().min(1).optional(),
+    crossZone: z.boolean().optional(),
+    download: z.boolean().optional(),
+  })
+  .strict();
+
+const headerLabelsSchema = z
+  .object({
+    navigationLabel: z.string().min(1),
+    mobileMenuLabel: z.string().min(1),
+    openMenuLabel: z.string().min(1),
+    closeMenuLabel: z.string().min(1),
+    themeToggleLabels: z
+      .object({
+        light: z.string().min(1),
+        dark: z.string().min(1),
+      })
+      .strict(),
+  })
+  .strict();
+
+const footerContentSchema = z
+  .object({
+    hireHeading: z.string().min(1),
+    hireBlurb: z.string().min(1),
+    socialProfilesLabel: z.string().min(1),
+    locationLabel: z.string().min(1),
+    location: z.string().min(1),
+    emailLabel: z.string().min(1),
+    email: z.string().email(),
+    copyrightName: z.string().min(1),
+    copyrightSuffix: z.string().min(1),
+    builtWith: z.string().min(1),
+  })
+  .strict();
+
 const portfolioCopySchema = z
   .object({
     logoPath: z.string().startsWith("/"),
@@ -163,6 +206,9 @@ export const portfolioContentSchema = z
     highlights: z.array(highlightSchema).length(4),
     projects: z.array(projectSchema).length(15),
     projectFilters: z.array(projectFilterSchema).length(5),
+    navigationItems: z.array(navigationItemSchema).length(6),
+    headerLabels: headerLabelsSchema,
+    footerContent: footerContentSchema,
     portfolioCopy: portfolioCopySchema,
     designSystemContent: designSystemContentSchema,
   })
@@ -177,6 +223,9 @@ export function parsePortfolioContent() {
     highlights,
     projects,
     projectFilters,
+    navigationItems,
+    headerLabels,
+    footerContent,
     portfolioCopy,
     designSystemContent,
   });

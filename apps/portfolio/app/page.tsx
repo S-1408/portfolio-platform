@@ -11,15 +11,7 @@ import {
   socials,
 } from "@repo/content";
 import type { ProjectCategory } from "@repo/content";
-import {
-  Badge,
-  Button,
-  Card,
-  Container,
-  Section,
-  SkipLink,
-  Tag,
-} from "@repo/ui";
+import { Badge, Button, Card, Container, Section, Tag } from "@repo/ui";
 
 function getProjectFilterLabel(category: ProjectCategory) {
   const filter = projectFilters.find((item) => item.value === category);
@@ -33,15 +25,12 @@ function getProjectFilterLabel(category: ProjectCategory) {
 
 export default function HomePage() {
   return (
-    <main
-      id="main-content"
-      className="bg-background py-section text-ink min-h-screen"
-    >
-      <SkipLink href="#main-content">
-        {portfolioCopy.skipToContentLabel}
-      </SkipLink>
+    <div className="bg-background py-section text-ink min-h-screen">
       <Container className="space-y-section">
-        <header className="grid items-center gap-10 md:grid-cols-[1fr_auto]">
+        <header
+          id="home"
+          className="grid items-center gap-10 md:grid-cols-[1fr_auto]"
+        >
           <div className="space-y-5">
             <Link
               className="focus-visible:outline-focus inline-flex rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
@@ -119,7 +108,7 @@ export default function HomePage() {
           </div>
         </header>
 
-        <Section id="skills" heading={portfolioCopy.skillsHeading}>
+        <Section id="about" heading={portfolioCopy.skillsHeading}>
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {skillGroups.map((group) => (
               <Card key={group.title}>
@@ -279,6 +268,6 @@ export default function HomePage() {
           <Button href={`mailto:${profile.email}`}>{profile.email}</Button>
         </Section>
       </Container>
-    </main>
+    </div>
   );
 }

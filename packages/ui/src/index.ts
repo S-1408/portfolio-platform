@@ -22,3 +22,7 @@ export { SkipLink } from "./skip-link.js";
 export type { SkipLinkProps } from "./skip-link.js";
 export { ThemeToggle } from "./theme-toggle.js";
 export type { ThemeToggleProps } from "./theme-toggle.js";
+export { Header } from "./header.js";
+export type { HeaderNavItem, HeaderProps } from "./header.js";
+export { Footer } from "./footer.js";
+export type { FooterProps, FooterSocialLink } from "./footer.js";
