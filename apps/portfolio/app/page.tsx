@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import {
   experience,
   highlights,
   portfolioCopy,
   profile,
-  projectFilters,
   projects,
   seoContent,
   skillGroups,
@@ -18,9 +16,12 @@ import {
   createPersonJsonLd,
   serializeJsonLd,
 } from "@repo/lib";
-import type { ProjectCategory } from "@repo/content";
-import { Badge, Button, Card, Container, Section, Tag } from "@repo/ui";
+import { Button, Card, Container, ProjectCard, Section, Tag } from "@repo/ui";
 import { ContactSection } from "./_contact/contact-section";
+import {
+  getProjectCategoryLabel,
+  projectCardLabels,
+} from "./_projects/project-display";
 import { siteConfig } from "./_seo/site";
 
 export const metadata: Metadata = createPageMetadata(siteConfig, {
@@ -43,16 +44,6 @@ const personJsonLd = createPersonJsonLd({
   },
   knowsAbout: seoContent.knowsAbout,
 });
-
-function getProjectFilterLabel(category: ProjectCategory) {
-  const filter = projectFilters.find((item) => item.value === category);
-
-  if (!filter) {
-    throw new Error(`Missing filter for project category "${category}"`);
-  }
-
-  return filter.label;
-}
 
 export default function HomePage() {
   const featuredProjects = projects.filter((project) => project.featured);
@@ -106,22 +97,25 @@ export default function HomePage() {
             </div>
             <div className="flex flex-wrap items-center gap-4">
               <Button href="/resume">{portfolioCopy.resumeLabel}</Button>
-              <nav aria-label={portfolioCopy.socialProfilesLabel}>
-                <ul className="flex flex-wrap gap-3">
-                  {socials.map((social) => (
-                    <li key={social.name}>
-                      <a
-                        className="text-accent font-medium underline underline-offset-4"
-                        href={social.url}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                      >
-                        {social.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
+              {/* A list, not a <nav>: the footer already owns the
+                  "Social profiles" navigation landmark. */}
+              <ul
+                aria-label={portfolioCopy.socialProfilesLabel}
+                className="flex flex-wrap gap-3"
+              >
+                {socials.map((social) => (
+                  <li key={social.name}>
+                    <a
+                      className="text-accent font-medium underline underline-offset-4"
+                      href={social.url}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
+                      {social.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
           <div className="flex flex-col items-center gap-4">
@@ -131,7 +125,7 @@ export default function HomePage() {
               alt={`${profile.name}, ${profile.role}`}
               width={224}
               height={224}
-              priority
+              preload
             />
             <Card className="flex items-center gap-3">
               <span className="text-accent text-3xl font-bold">
@@ -148,9 +142,9 @@ export default function HomePage() {
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {skillGroups.map((group) => (
               <Card key={group.title}>
-                <p className="text-accent text-sm font-bold">
+                {/* <p className="text-accent text-sm font-bold">
                   {String(group.number).padStart(2, "0")}
-                </p>
+                </p> */}
                 <h3 className="mt-3 text-lg font-semibold">{group.title}</h3>
                 <ul className="mt-4 flex flex-wrap gap-2">
                   {group.skills.map((skill) => (
@@ -227,72 +221,17 @@ export default function HomePage() {
         </Section>
 
         <Section id="projects" heading={portfolioCopy.featuredProjectsHeading}>
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <ul className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {featuredProjects.map((project) => (
-              <Card
-                key={project.slug}
-                className="flex h-full flex-col overflow-hidden p-0"
-              >
-                <div className="relative aspect-video w-full">
-                  <Image
-                    className="object-cover"
-                    src={project.image}
-                    alt={`${project.title} ${portfolioCopy.projectPreviewAlt}`}
-                    fill
-                    sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
-                  />
-                </div>
-                <div className="p-card flex flex-1 flex-col">
-                  <div className="flex flex-wrap gap-2">
-                    <Badge>{getProjectFilterLabel(project.category)}</Badge>
-                    {project.featured ? (
-                      <Badge variant="accent">
-                        {portfolioCopy.featuredLabel}
-                      </Badge>
-                    ) : null}
-                  </div>
-                  <h3 className="mt-4 text-xl font-semibold">
-                    <Link
-                      className="hover:text-primary-hover focus-visible:outline-focus focus-visible:outline-2 focus-visible:outline-offset-4"
-                      href={`/projects/${project.slug}`}
-                    >
-                      {project.title}
-                    </Link>
-                  </h3>
-                  <p className="text-muted mt-2">{project.description}</p>
-                  <ul className="mt-4 flex flex-wrap gap-2">
-                    {project.technologies.map((technology) => (
-                      <li key={technology}>
-                        <Tag>{technology}</Tag>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-auto flex flex-wrap gap-3 pt-6">
-                    {project.demoUrl ? (
-                      <Button
-                        href={project.demoUrl}
-                        size="sm"
-                        variant="outline"
-                        target="_blank"
-                        rel="noreferrer noopener"
-                      >
-                        {portfolioCopy.liveDemoLabel}
-                      </Button>
-                    ) : null}
-                    <Button
-                      href={project.codeUrl}
-                      size="sm"
-                      variant="ghost"
-                      target="_blank"
-                      rel="noreferrer noopener"
-                    >
-                      {portfolioCopy.codeLabel}
-                    </Button>
-                  </div>
-                </div>
-              </Card>
+              <li key={project.slug}>
+                <ProjectCard
+                  project={project}
+                  categoryLabel={getProjectCategoryLabel(project.category)}
+                  labels={projectCardLabels}
+                />
+              </li>
             ))}
-          </div>
+          </ul>
           <div className="flex justify-center">
             <Button href="/projects" variant="outline">
               {portfolioCopy.viewAllProjectsLabel}

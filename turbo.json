@@ -5,7 +5,13 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
-      "env": ["NEXT_PUBLIC_*", "VERCEL_ENV", "VERCEL_PROJECT_PRODUCTION_URL"]
+      "env": [
+        "NEXT_PUBLIC_*",
+        "BLOG_URL",
+        "VERCEL",
+        "VERCEL_ENV",
+        "VERCEL_PROJECT_PRODUCTION_URL"
+      ]
     },
     "dev": {
       "persistent": true,
@@ -20,7 +26,20 @@
       "outputs": []
     },
     "test": {
+      "dependsOn": ["^build"],
       "outputs": []
+    },
+    "e2e": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "outputs": ["playwright-report/**", "test-results/**"],
+      "passThroughEnv": [
+        "CI",
+        "E2E_BASE_URL",
+        "E2E_PORT",
+        "E2E_REUSE_SERVER",
+        "PLAYWRIGHT_*"
+      ]
     }
   }
 }

@@ -11,7 +11,7 @@ export const ogImageSize = { width: 1200, height: 630 };
 const colors = {
   background: "#10201f",
   surface: "#172b2a",
-  border: "#647d79",
+  border: "#6d8783",
   primary: "#00c6bc",
   accent: "#ff9c62",
   ink: "#edf5f3",

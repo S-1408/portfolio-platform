@@ -1,0 +1,68 @@
+version: 2
+
+updates:
+  # All workspace packages share one pnpm lockfile at the root.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Asia/Kolkata
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: deps
+    labels: [dependencies]
+    groups:
+      # Upgraded together: mismatched versions break the build.
+      next-and-react:
+        patterns:
+          - next
+          - "@next/*"
+          - react
+          - react-dom
+          - "@types/react"
+          - "@types/react-dom"
+      testing:
+        patterns:
+          - vitest
+          - "@vitejs/*"
+          - "@testing-library/*"
+          - jsdom
+          - "@playwright/test"
+          - "@axe-core/*"
+      lint-and-format:
+        patterns:
+          - eslint
+          - "@eslint/*"
+          - typescript-eslint
+          - "@typescript-eslint/*"
+          - prettier
+          - prettier-plugin-*
+          - typescript
+      styling:
+        patterns:
+          - tailwindcss
+          - "@tailwindcss/*"
+      vercel:
+        patterns:
+          - "@vercel/*"
+          - turbo
+      # Everything else: minor and patch updates in a single PR.
+      other-minor-and-patch:
+        patterns: ["*"]
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Asia/Kolkata
+    commit-message:
+      prefix: ci
+    labels: [dependencies]
+    groups:
+      github-actions:
+        patterns: ["*"]

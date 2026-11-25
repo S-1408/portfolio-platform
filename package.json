@@ -12,7 +12,9 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "e2e": "turbo run e2e",
+    "analyze": "pnpm --filter @repo/portfolio analyze"
   },
   "devDependencies": {
     "eslint": "^10.0.1",
@@ -26,7 +28,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
       "prettier --write",
-      "eslint --fix"
+      "eslint --fix --no-warn-ignored"
     ],
     "*.{json,md,mdx,css,yaml,yml}": [
       "prettier --write"

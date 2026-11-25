@@ -8,7 +8,7 @@ import {
 export type SectionProps = Omit<HTMLAttributes<HTMLElement>, "title"> & {
   id: string;
   heading: ReactNode;
-  headingLevel?: 2 | 3 | 4;
+  headingLevel?: 1 | 2 | 3 | 4;
   description?: ReactNode;
 };
 
@@ -38,7 +38,10 @@ export const Section = forwardRef<HTMLElement, SectionProps>(function Section(
         `h${headingLevel}`,
         {
           id: headingId,
-          className: "text-2xl font-semibold tracking-tight text-ink",
+          className:
+            headingLevel === 1
+              ? "text-4xl font-bold tracking-tight text-ink"
+              : "text-2xl font-semibold tracking-tight text-ink",
         },
         heading,
       )}

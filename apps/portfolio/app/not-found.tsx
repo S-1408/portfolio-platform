@@ -13,7 +13,7 @@ export default function NotFound() {
       <div className="mx-auto flex max-w-2xl flex-col items-center gap-6 text-center">
         <p
           aria-hidden="true"
-          className="text-primary text-8xl font-bold tracking-tight sm:text-9xl"
+          className="text-accent text-8xl font-bold tracking-tight sm:text-9xl"
         >
           {notFoundContent.code}
         </p>

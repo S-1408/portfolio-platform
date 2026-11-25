@@ -234,7 +234,7 @@ export function Header({ navItems, logoSrc, logoAlt, labels }: HeaderProps) {
             alt=""
             width={48}
             height={48}
-            priority
+            loading="eager"
             className="size-10 rounded-full object-contain"
           />
         </Link>

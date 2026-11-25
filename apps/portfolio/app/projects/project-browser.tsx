@@ -1,63 +1,88 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { portfolioCopy, projectFilters, projects } from "@repo/content";
-import { filterProjects } from "@repo/lib";
-import { Badge, Button, Card, Tag } from "@repo/ui";
+import {
+  buildProjectSearchHref,
+  filterProjects,
+  parseProjectSearchParams,
+  type ProjectSearchState,
+} from "@repo/lib";
+import { Button, ProjectCard } from "@repo/ui";
+import {
+  getProjectCategoryLabel,
+  projectCardLabels,
+} from "../_projects/project-display";
+import { useUrlSearch } from "./use-url-search";
 
+const validCategories = projectFilters.map((filter) => filter.value);
+
+/** Interactive browser: state lives in the URL (?category=&q=). */
 export default function ProjectBrowser() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const categoryParam = searchParams.get("category") ?? "all";
-  const queryParam = searchParams.get("q") ?? "";
-  const activeCategory = projectFilters.some(
-    (filter) => filter.value === categoryParam,
-  )
-    ? categoryParam
-    : "all";
-  const [queryInput, setQueryInput] = useState(queryParam);
+  const { searchParams, push } = useUrlSearch();
+  const { category, query } = parseProjectSearchParams(
+    searchParams,
+    validCategories,
+  );
+  const [queryInput, setQueryInput] = useState(query);
 
   useEffect(() => {
-    setQueryInput(queryParam);
-  }, [queryParam]);
+    setQueryInput(query);
+  }, [query]);
 
-  const updateUrl = (updates: Record<string, string | null>) => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    for (const [key, value] of Object.entries(updates)) {
-      if (value) {
-        params.set(key, value);
-      } else {
-        params.delete(key);
-      }
-    }
-
-    const queryString = params.toString();
-    const href = queryString ? `${pathname}?${queryString}` : pathname;
-    router.push(href, { scroll: false });
+  const navigate = (updates: Partial<ProjectSearchState>) => {
+    push(buildProjectSearchHref("/projects", searchParams, updates));
   };
 
-  const filteredProjects = filterProjects(projects, {
-    category: activeCategory,
-    query: queryParam,
-  });
+  return (
+    <ProjectBrowserView
+      category={category}
+      query={query}
+      queryInput={queryInput}
+      onQueryInputChange={setQueryInput}
+      onSearch={(value) => {
+        if (value.trim() !== query) navigate({ query: value });
+      }}
+      onCategoryChange={(value) => {
+        if (value !== category) navigate({ category: value });
+      }}
+    />
+  );
+}
+
+type ProjectBrowserViewProps = {
+  category: string;
+  query: string;
+  queryInput: string;
+  onQueryInputChange: (value: string) => void;
+  onSearch: (value: string) => void;
+  onCategoryChange: (category: string) => void;
+};
+
+// Cards in the first row hold the LCP image, so don't lazy-load them.
+const EAGER_IMAGE_COUNT = 3;
+
+function ProjectBrowserView({
+  category,
+  query,
+  queryInput,
+  onQueryInputChange,
+  onSearch,
+  onCategoryChange,
+}: ProjectBrowserViewProps) {
+  const filteredProjects = filterProjects(projects, { category, query });
+  const count = filteredProjects.length;
 
   return (
     <div className="space-y-6">
       <div className="space-y-4">
         <form
+          role="search"
+          action="/projects"
           className="flex flex-col gap-3 sm:flex-row sm:items-end"
           onSubmit={(event) => {
             event.preventDefault();
-            const query = queryInput.trim();
-
-            if (query !== queryParam) {
-              updateUrl({ q: query || null });
-            }
+            onSearch(queryInput);
           }}
         >
           <div className="w-full md:max-w-md">
@@ -67,10 +92,13 @@ export default function ProjectBrowser() {
             <input
               className="border-border bg-surface-raised text-ink placeholder:text-muted focus-visible:outline-focus min-h-11 w-full rounded-md border px-4 focus-visible:outline-2 focus-visible:outline-offset-2"
               id="project-search"
-              onChange={(event) => setQueryInput(event.currentTarget.value)}
+              name="q"
               placeholder={portfolioCopy.projectSearchPlaceholder}
               type="search"
               value={queryInput}
+              onChange={(event) =>
+                onQueryInputChange(event.currentTarget.value)
+              }
             />
           </div>
           <Button type="submit" variant="outline">
@@ -82,118 +110,45 @@ export default function ProjectBrowser() {
           className="flex flex-wrap gap-2"
           role="group"
         >
-          {projectFilters.map((filter) => (
-            <Button
-              key={filter.value}
-              aria-pressed={activeCategory === filter.value}
-              onClick={() => {
-                if (activeCategory !== filter.value) {
-                  updateUrl({
-                    category: filter.value === "all" ? null : filter.value,
-                  });
-                }
-              }}
-              size="sm"
-              type="button"
-              variant={activeCategory === filter.value ? "primary" : "outline"}
-            >
-              {filter.label}
-            </Button>
-          ))}
+          {projectFilters.map((filter) => {
+            const active = category === filter.value;
+
+            return (
+              <Button
+                key={filter.value}
+                aria-pressed={active}
+                onClick={() => onCategoryChange(filter.value)}
+                size="sm"
+                type="button"
+                variant={active ? "primary" : "outline"}
+              >
+                {filter.label}
+              </Button>
+            );
+          })}
         </div>
       </div>
 
-      <p aria-atomic="true" aria-live="polite" className="text-muted">
-        {filteredProjects.length}{" "}
-        {filteredProjects.length === 1
+      <p role="status" aria-atomic="true" className="text-muted">
+        {count}{" "}
+        {count === 1
           ? portfolioCopy.projectResultsSingular
           : portfolioCopy.projectResultsPlural}
       </p>
 
-      {filteredProjects.length > 0 ? (
+      {count > 0 ? (
         <ul className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {filteredProjects.map((project) => {
-            const categoryLabel = projectFilters.find(
-              (filter) => filter.value === project.category,
-            )?.label;
-
-            if (!categoryLabel) {
-              throw new Error(
-                `Missing filter label for project category "${project.category}"`,
-              );
-            }
-
-            return (
-              <li key={project.slug}>
-                <Card className="flex h-full flex-col overflow-hidden p-0">
-                  <Link
-                    aria-label={`${project.title}: view project details`}
-                    className="focus-visible:outline-focus relative block aspect-video w-full focus-visible:outline-2 focus-visible:outline-offset-2"
-                    href={`/projects/${project.slug}`}
-                  >
-                    <Image
-                      alt={`${project.title} ${portfolioCopy.projectPreviewAlt}`}
-                      className="object-cover"
-                      fill
-                      sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
-                      src={project.image}
-                    />
-                  </Link>
-                  <div className="p-card flex flex-1 flex-col">
-                    <div className="flex flex-wrap gap-2">
-                      <Badge>{categoryLabel}</Badge>
-                      {project.featured ? (
-                        <Badge variant="accent">
-                          {portfolioCopy.featuredLabel}
-                        </Badge>
-                      ) : null}
-                    </div>
-                    <h2 className="mt-4 text-xl font-semibold">
-                      <Link
-                        className="hover:text-primary-hover focus-visible:outline-focus focus-visible:outline-2 focus-visible:outline-offset-4"
-                        href={`/projects/${project.slug}`}
-                      >
-                        {project.title}
-                      </Link>
-                    </h2>
-                    <p className="text-muted mt-2">{project.description}</p>
-                    <ul
-                      aria-label={project.title}
-                      className="mt-4 flex flex-wrap gap-2"
-                    >
-                      {project.technologies.map((technology) => (
-                        <li key={technology}>
-                          <Tag>{technology}</Tag>
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="mt-auto flex flex-wrap gap-3 pt-6">
-                      {project.demoUrl ? (
-                        <Button
-                          href={project.demoUrl}
-                          rel="noreferrer noopener"
-                          size="sm"
-                          target="_blank"
-                          variant="outline"
-                        >
-                          {portfolioCopy.liveDemoLabel}
-                        </Button>
-                      ) : null}
-                      <Button
-                        href={project.codeUrl}
-                        rel="noreferrer noopener"
-                        size="sm"
-                        target="_blank"
-                        variant="ghost"
-                      >
-                        {portfolioCopy.codeLabel}
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              </li>
-            );
-          })}
+          {filteredProjects.map((project, index) => (
+            <li key={project.slug}>
+              <ProjectCard
+                project={project}
+                categoryLabel={getProjectCategoryLabel(project.category)}
+                headingLevel={2}
+                prioritizeImage={index < EAGER_IMAGE_COUNT}
+                labels={projectCardLabels}
+              />
+            </li>
+          ))}
         </ul>
       ) : (
         <div className="border-border bg-surface-raised rounded-lg border p-8 text-center">

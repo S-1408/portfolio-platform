@@ -1,0 +1,9 @@
+# Default owner for everything in the repository.
+# Later rules take precedence; add narrower owners below as the team grows.
+* @S-1408
+
+# Deployment, CI and repository settings
+/.github/            @S-1408
+/turbo.json          @S-1408
+/lighthouserc.cjs    @S-1408
+/docs/deployment.md  @S-1408
