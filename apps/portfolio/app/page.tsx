@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import {
   experience,
   highlights,
@@ -25,36 +24,37 @@ function getProjectFilterLabel(category: ProjectCategory) {
 
 export default function HomePage() {
   return (
-    <div className="bg-background py-section text-ink min-h-screen">
-      <Container className="space-y-section">
+    <div className="home-page-background bg-background text-ink py-section min-h-screen">
+      <div aria-hidden="true" className="home-page-motion">
+        <span className="home-page-motion__shape home-page-motion__shape--teal" />
+        <span className="home-page-motion__shape home-page-motion__shape--orange" />
+        <span className="home-page-motion__shape home-page-motion__shape--teal-small" />
+        <span className="home-page-motion__particle home-page-motion__particle--one" />
+        <span className="home-page-motion__particle home-page-motion__particle--two" />
+        <span className="home-page-motion__particle home-page-motion__particle--three" />
+        <span className="home-page-motion__particle home-page-motion__particle--four" />
+        <span className="home-page-motion__particle home-page-motion__particle--five" />
+        <span className="home-page-motion__particle home-page-motion__particle--six" />
+      </div>
+      <Container className="space-y-section relative z-10">
         <header
           id="home"
           className="grid items-center gap-10 md:grid-cols-[1fr_auto]"
         >
           <div className="space-y-5">
-            <Link
-              className="focus-visible:outline-focus inline-flex rounded-md focus-visible:outline-2 focus-visible:outline-offset-2"
-              href="/"
-              aria-label={profile.name}
-            >
-              <Image
-                src={portfolioCopy.logoPath}
-                alt=""
-                width={48}
-                height={48}
-                priority
-              />
-            </Link>
-            <p className="text-accent font-semibold">
+            <p className="availability-pill">
+              <span aria-hidden="true" className="availability-pill__dot" />
               {profile.availabilityLine}
             </p>
             <div className="space-y-2">
               <h1 className="text-5xl font-bold tracking-tight">
                 {profile.name}
               </h1>
-              <p className="text-muted text-2xl">{profile.role}</p>
+              <p className="home-designation text-muted text-2xl">
+                {profile.role}
+              </p>
             </div>
-            <p className="text-muted max-w-2xl text-lg leading-8">
+            <p className="home-intro-accent text-muted max-w-2xl text-lg leading-8">
               {profile.intro}
             </p>
             <div className="flex flex-wrap items-center gap-4">
@@ -98,7 +98,7 @@ export default function HomePage() {
               priority
             />
             <Card className="flex items-center gap-3">
-              <span className="text-3xl font-bold">
+              <span className="text-accent text-3xl font-bold">
                 {profile.yearsOfExperience}+
               </span>
               <span className="text-muted max-w-28 text-sm">

@@ -40,10 +40,10 @@ const focusableSelector =
   'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 function NavLink({ item, active, onNavigate }: NavLinkProps) {
-  const className = `relative rounded-sm px-3 py-2 text-sm font-semibold transition-colors after:absolute after:inset-x-3 after:bottom-1 after:h-0.5 after:bg-accent after:transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus ${
+  const className = `inline-flex min-h-11 items-center rounded-full border px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus ${
     active
-      ? "text-accent after:scale-x-100"
-      : "text-ink after:scale-x-0 hover:text-accent"
+      ? "border-accent/20 bg-accent-surface text-accent"
+      : "border-transparent text-muted hover:bg-surface hover:text-accent"
   }`;
   const ariaCurrent = active ? "location" : undefined;
 
@@ -225,7 +225,7 @@ export function Header({ navItems, logoSrc, logoAlt, labels }: HeaderProps) {
     <header className="border-border bg-background/90 sticky top-0 z-40 border-b backdrop-blur-md">
       <div className="px-page-x mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4">
         <Link
-          className="focus-visible:outline-focus inline-flex shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="focus-visible:outline-focus inline-flex shrink-0 overflow-hidden rounded-full transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2"
           href="/"
           aria-label={logoAlt}
         >
@@ -235,7 +235,7 @@ export function Header({ navItems, logoSrc, logoAlt, labels }: HeaderProps) {
             width={48}
             height={48}
             priority
-            className="size-10 object-contain"
+            className="size-10 rounded-full object-contain"
           />
         </Link>
 
